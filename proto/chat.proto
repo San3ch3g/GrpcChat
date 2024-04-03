@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package chat;
+option go_package = "/generated";
+
+message User {
+  uint32 id = 1;
+  string nickname = 2;
+  string password = 3;
+}
+
+message Room {
+  uint32 id = 1;
+  string name = 2;
+}
+
+message RegisterRequest {
+  string nickname = 1;
+  string password = 2;
+}
+
+message RegisterResponse {
+  uint32 user_id = 1;
+  string token = 2;
+}
+
+message LoginRequest {
+  string nickname = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  uint32 user_id = 1;
+  string token = 2;
+}
+
+message CreateRoomRequest {
+  string room_name = 1;
+
+}
+
+message CreateRoomResponse {
+  Room room = 1;
+}
+
+message SendMessageRequest {
+  uint32 room_id = 1;
+  string content = 2;
+  uint32 sender_id = 3;
+}
+
+message SendMessageResponse {
+  uint32 message_id = 1;
+}
+
+message GetMessagesRequest {
+  uint32 room_id = 1;
+}
+
+message GetMessagesResponse {
+  uint32 room_id = 1;
+  string content = 2;
+  string timestamp = 3;
+  uint32 sender_id = 4;
+}
+
+service ChatService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+  rpc SendMessage(stream SendMessageRequest) returns (SendMessageResponse);
+  rpc GetMessages(GetMessagesRequest) returns (stream GetMessagesResponse);
+}
